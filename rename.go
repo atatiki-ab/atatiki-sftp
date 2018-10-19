@@ -4,9 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-
-	"github.com/pkg/sftp"
-	"golang.org/x/crypto/ssh"
 )
 
 func init() {
@@ -32,22 +29,7 @@ func renameHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	sshConfig := &ssh.ClientConfig{
-		User: settings.User,
-		Auth: []ssh.AuthMethod{
-			ssh.Password(settings.Password),
-		},
-	}
-	sshConfig.HostKeyCallback = ssh.InsecureIgnoreHostKey()
-
-	host := "localhost:22"
-	client, err := ssh.Dial("tcp", host, sshConfig)
-	if err != nil {
-		logger.Error(err)
-		return
-	}
-
-	sftp, err := sftp.NewClient(client)
+	sftp, err := getSftpClient()
 	if err != nil {
 		logger.Error(err)
 		return
