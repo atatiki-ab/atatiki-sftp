@@ -11,9 +11,6 @@ func init() {
 }
 
 func renameHandler(w http.ResponseWriter, r *http.Request) {
-	//vars := mux.Vars(r)
-	//logger.Info("Here")
-	//fmt.Println(settings)
 
 	command := struct {
 		OldName string `json:"oldname"`
