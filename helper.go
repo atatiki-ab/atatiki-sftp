@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/pkg/sftp"
 	"golang.org/x/crypto/ssh"
 )
@@ -29,7 +27,7 @@ func getSftpClient() (*sftp.Client, error) {
 	sshConfig.HostKeyCallback = ssh.InsecureIgnoreHostKey()
 
 	host := settings.Host
-	fmt.Println(settings.Host, settings.User)
+	//fmt.Println(settings.Host, settings.User)
 	client, err := ssh.Dial("tcp", host, sshConfig)
 	if err != nil {
 		logger.Error(err)
