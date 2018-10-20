@@ -6,6 +6,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// Route struct for the service
 type Route struct {
 	Name        string
 	Method      string
@@ -13,8 +14,10 @@ type Route struct {
 	HandlerFunc http.HandlerFunc
 }
 
+// Routes for the servcie web handlers
 type Routes []Route
 
+// NewRouter creates a new web handler
 func NewRouter() *mux.Router {
 	router := mux.NewRouter().StrictSlash(true)
 	for _, route := range routes {
