@@ -18,7 +18,7 @@ const filenameSettings = "settings.json"
 
 var settings Config
 
-const appVersionStr = "v1.0"
+const appVersionStr = "v1.1"
 
 var routes = Routes{
 	Route{
