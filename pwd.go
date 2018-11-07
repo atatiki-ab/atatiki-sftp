@@ -14,6 +14,7 @@ func testHandler(w http.ResponseWriter, r *http.Request) {
 	sftp, err := getSftpClient()
 	if err != nil {
 		logger.Error(err)
+		http.Error(w, err.Error(), 500)
 		return
 	}
 	defer sftp.Close()
