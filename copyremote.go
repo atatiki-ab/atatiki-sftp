@@ -1,17 +1,19 @@
 package main
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"golang.org/x/text/encoding/charmap"
 )
 
 type remoteFile struct {
-	PathAndFilename string `json:"pathAndFilename"`
-	Content         string `json:"content"`
+	PathAndFilename       string `json:"pathAndFilename"`
+	Content               string `json:"content"`
+	AddWindowsLineEndings bool   `json:"addWindowsLineEndings"`
+	ConvertTo8859         bool   `json:"convertTo8859"`
 }
 
 func init() {
@@ -45,16 +47,23 @@ func copyRemote(rf remoteFile) error {
 	}
 	defer sftp.Close()
 
-	buff := bytes.NewBufferString(rf.Content)
 	file, err := sftp.Create(rf.PathAndFilename)
 	if err != nil {
 		return err
 	}
 	defer file.Close()
 
-	b, err := charmap.ISO8859_1.NewEncoder().Bytes(buff.Bytes())
-	if err != nil {
-		return err
+	if rf.AddWindowsLineEndings {
+		rf.Content = strings.Replace(rf.Content, "\n", "\r\n", -1)
+	}
+
+	var b []byte
+	if rf.ConvertTo8859 {
+		if b, err = charmap.ISO8859_1.NewEncoder().Bytes([]byte(rf.Content)); err != nil {
+			return err
+		}
+	} else {
+		b = []byte(rf.Content)
 	}
 
 	if _, err := file.Write(b); err != nil {
