@@ -17,7 +17,7 @@ type remoteFile struct {
 }
 
 func init() {
-	routes = append(routes, Route{"copyRemoteHandler", "POST", "/copyremote", copyRemoteHandler})
+	routes = append(routes, Route{"copyRemoteHandler", "POST", "/upload", copyRemoteHandler})
 }
 
 func copyRemoteHandler(w http.ResponseWriter, r *http.Request) {
