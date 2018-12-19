@@ -34,6 +34,7 @@ func downloadHandler(w http.ResponseWriter, r *http.Request) {
 	sftp, err := getSftpClient()
 	if err != nil {
 		logger.Error(err)
+		http.Error(w, err.Error(), 500)
 		return
 	}
 	defer sftp.Close()
@@ -41,11 +42,13 @@ func downloadHandler(w http.ResponseWriter, r *http.Request) {
 	file, err := sftp.Open(f.PathAndFileName)
 	if err != nil {
 		logger.Error(err)
+		http.Error(w, err.Error(), 500)
 		return
 	}
 	buff := &bytes.Buffer{}
 	if _, err := file.WriteTo(buff); err != nil {
 		logger.Error(err)
+		http.Error(w, err.Error(), 500)
 		return
 	}
 	str := buff.String()
