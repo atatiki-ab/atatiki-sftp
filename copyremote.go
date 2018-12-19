@@ -57,16 +57,13 @@ func copyRemote(rf remoteFile) error {
 		rf.Content = strings.Replace(rf.Content, "\n", "\r\n", -1)
 	}
 
-	var b []byte
 	if rf.ConvertTo8859 {
-		if b, err = charmap.ISO8859_1.NewEncoder().Bytes([]byte(rf.Content)); err != nil {
+		if rf.Content, err = charmap.ISO8859_1.NewEncoder().String(rf.Content); err != nil {
 			return err
 		}
-	} else {
-		b = []byte(rf.Content)
 	}
 
-	if _, err := file.Write(b); err != nil {
+	if _, err := file.Write([]byte(rf.Content)); err != nil {
 		return err
 	}
 	return nil
